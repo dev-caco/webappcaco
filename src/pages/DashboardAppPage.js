@@ -1,8 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
+import { useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography,TextField, Card,Button, CardActions} from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import cacoimage from '../assets/cacoimage.png'
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -22,34 +27,127 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [firstname, setFirstName] = useState("")
+  const [lastname, setLastName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [invalidPhone, setInvalidPhone] = useState(false)
+  const [invalidEmail, setInvalidEmail] = useState(false)
+  const [securityChecked, setSecurityChecked] = useState(false)
+  const handleChange = (event) => {
 
+    switch (event.target.name){
+      case 'firstname':
+        setFirstName(event.target.value)
+        break;
+      case 'lastname':
+        setLastName(event.target.value)
+        break;
+      case 'phone':
+        if (event.target.value.length !== 10) {
+          setInvalidPhone(true)
+        } else {
+          setInvalidPhone(false)
+        }
+        setPhone(event.target.value)
+        break;
+      case 'email':
+        if (!event.target.value.endsWith("@queensu.ca")) {
+          setInvalidEmail(true)
+        } else {
+          setInvalidEmail(false)
+        }
+        setEmail(event.target.value)
+        break;
+      default:
+        
+    }
+
+  };
+  const handleSecurityCheckbox = (event) => {
+    console.log(event.target.checked)
+    setSecurityChecked(event.target.checked);
+  };
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> CaCo </title>
       </Helmet>
 
-      <Container maxWidth="xl">
-        <Typography variant="h2" sx={{ mb: 5 }}>
+     
+        {/* <Typography variant="h2" sx={{ mb: 5 }}>
           Welcome to CaCo
-        </Typography>
+        </Typography> */}
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={25} md={15}>
+          <Card
+            style={{
+              py: 5,
+              boxShadow: 0,
+              textAlign: 'center',
+              color: "#f5ca28",
+              backgroundColor: "#181a30"
+              
+            }}
+          
+          >
+            
+
+            <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
+             Welcome to CaCo
+            </Typography>
+            <Grid container spacing = {2}>
+              <Grid item xs ={15} sm ={5} md = {6} sx = {{marginLeft: 10, textAlign: 'left'}}>
+                
+                <Typography variant="h3" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                  Sign Up
+                </Typography>
+                <TextField required name="firstname" label="First Name" 
+                  sx = {{input: { color: "#f5ca28" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  onChange={e=> {handleChange(e)}}
+                />
+                <TextField required name="lastname" label="Last Name"
+                  sx = {{ width: 300, input: { color: "#f5ca28" }}} 
+                  onChange={e=> {handleChange(e)}}
+                />
+                <TextField required name="email" label="Email Address" error = {email && invalidEmail} helperText= {invalidEmail? "This must be a valid Queen's email account": ""}
+                  sx = {{input: { color: "#f5ca28" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  onChange={e=> {handleChange(e)}}
+                />
+                <TextField required name="phone" label="Phone Number" error = {phone && invalidPhone} helperText = {invalidPhone? "This phone number is invalid": ""}
+                  sx = {{input: { color: "#f5ca28" }, width: 300}} 
+                  onChange={e=> {handleChange(e)}}
+                />
+                <FormGroup>
+          
+                  <FormControlLabel required control={<Checkbox />} label="I have read CaCo's privacy and security policy and consent to the guidelines they have outlined." onChange={e=> {handleSecurityCheckbox(e)}}/>
+            
+                </FormGroup>
+                
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#f5ca28", color: "#181a30", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)}>Submit</Button>
+                
+              </Grid>
+            
+              <Grid item xs ={15} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
+                <img src={cacoimage} alt="Caco Phone" width ={450} height = {600}/>
+              </Grid>
+            
+            </Grid>
+          </Card>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={25} md={15}>
             <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
@@ -214,7 +312,7 @@ export default function DashboardAppPage() {
           </Grid> */}
           {/* INITIAL COMMENT OUT */}
         </Grid>
-      </Container>
+    
     </>
   );
 }
