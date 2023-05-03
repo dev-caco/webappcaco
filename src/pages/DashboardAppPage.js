@@ -137,6 +137,62 @@ export default function DashboardAppPage() {
           </Card>
           </Grid>
 
+          
+          <Grid item xs={12} sm={25} md={15}>
+          <Card
+            style={{
+              py: 5,
+              boxShadow: 0,
+              textAlign: 'center',
+              color: "#f5ca28",
+              backgroundColor: "#181a30"
+              
+            }}
+          
+          >
+            
+
+            <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
+             What is CaCo?
+            </Typography>
+            <Grid container spacing = {2}>
+              <Grid item xs ={20} sm ={7} md = {6} sx = {{marginLeft: 10, textAlign: 'left'}}>
+                
+                <Typography variant="h4" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                  CaCo is your Queen's University Digital Texting Assistant developed by 4 University students! We want to provide you with an easy way to quickly retireve various questions about Queen's 
+                  University from one place 😊 !
+                </Typography>
+                <Typography variant="h4" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                  We provide students with various features and resources such as:
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                📚 Course FAQs
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                🏫 On-Campus FAQs
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                🎓 Academic Support
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                🏥 On-Campus Health Services
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                🧠 On-Campus Study Room Bookings
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
+                💪 ARC Gym Bookings
+                </Typography>
+              </Grid>
+            
+              <Grid item xs ={10} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
+                <iframe src="https://youtube.com/embed/9rOlfyppjJA" style={{height: "450px", width: "400px"}} title="Iframe Example"/>
+              </Grid>
+            
+            </Grid>
+          </Card>
+          </Grid>
+
           {/* <Grid item xs={12} sm={25} md={15}>
             <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid> */}
