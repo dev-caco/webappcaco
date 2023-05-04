@@ -15,6 +15,7 @@ import study from '../assets/study.png'
 import gym from '../assets/weightlifter.png'
 // components
 import Iconify from '../components/iconify';
+import UsersService from '../services/UserService'
 // sections
 import {
   AppTasks,
@@ -40,7 +41,10 @@ export default function DashboardAppPage() {
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
   const [code, setCode] = useState("")
-  const [emailSent,setEmailSent] = useState(true)
+  const [emailSent,setEmailSent] = useState(false)
+
+  const usersService = UsersService();
+
   const handleChange = (event) => {
 
     switch (event.target.name){
@@ -78,6 +82,26 @@ export default function DashboardAppPage() {
 
   async function handleClick() {
     setEmailSent(true)
+    const verifyCode = Math.floor(Math.random()*90000) + 10000
+    const body = {
+      first_name: firstname,
+      last_name: lastname,
+      queens_email: email,
+      user_phone: phone,
+      code: verifyCode
+    }
+    try {
+      const dbRes = await usersService.insertUser(body)
+      console.log(dbRes)
+      const codeRes = await usersService.sendEmailCode({
+        queens_email: email,
+        code: verifyCode
+      })
+
+      console.log(codeRes)
+    } catch(e) {
+      console.log(e)
+    }
   }
 
   async function handleCodeClick(){
@@ -291,7 +315,7 @@ export default function DashboardAppPage() {
                 
                 <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4, display: emailSent? "none": ""}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick = {(e) => {handleClick()}}>Submit</Button>
 
-                <Typography variant = "h4">
+                <Typography variant = "h4" style = {{display: emailSent? "": "none"}}>
                   A code has been sent to your Queen's email
                 </Typography>
                 <TextField type= 'number' name="code" label="Enter Code"  inputProps={{min: 0, maxLength: 5,style: { textAlign: 'center' }}}
