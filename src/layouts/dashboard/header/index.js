@@ -70,7 +70,7 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <img src={logo} alt="Caco Phone" width ={180} height = {40}/>
+          <img src={logo} alt="Caco Phone" width ={180} height = {44}/>
         </Stack>
       </StyledToolbar>
     </StyledRoot>

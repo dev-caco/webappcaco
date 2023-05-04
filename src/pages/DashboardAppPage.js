@@ -7,7 +7,7 @@ import { Grid, Container, Typography,TextField, Card,Button, CardActions} from '
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import cacoimage from '../assets/cacoimage.png'
+import cacoimage from '../assets/chat.png'
 import books from '../assets/book-stack.png'
 import mentalhealth from '../assets/mental-health.png'
 import school from '../assets/school.png'
@@ -39,6 +39,8 @@ export default function DashboardAppPage() {
   const [invalidPhone, setInvalidPhone] = useState(false)
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
+  const [code, setCode] = useState("")
+  const [emailSent,setEmailSent] = useState(true)
   const handleChange = (event) => {
 
     switch (event.target.name){
@@ -64,11 +66,23 @@ export default function DashboardAppPage() {
         }
         setEmail(event.target.value)
         break;
+      case 'code':
+        setCode(event.target.value) 
+        console.log(code)
+        break; 
       default:
-        
+      
     }
 
   };
+
+  async function handleClick() {
+    setEmailSent(true)
+  }
+
+  async function handleCodeClick(){
+    console.log(code)
+  }
   const handleSecurityCheckbox = (event) => {
     console.log(event.target.checked)
     setSecurityChecked(event.target.checked);
@@ -247,39 +261,50 @@ export default function DashboardAppPage() {
              Start Using CaCo Today
             </Typography>
             <Grid container spacing = {2}>
-              <Grid item xs ={15} sm ={5} md = {6} sx = {{marginLeft: 10, textAlign: 'left'}}>
+              <Grid item xs ={15} sm ={5} md = {5} sx = {{marginLeft: 20, textAlign: 'center', alignItems: 'center', justifyContent: 1}}>
                 
                 <Typography variant="h3" sx= {{fontWeight: 'bold', marginBottom: 2}}>
                   Sign Up
                 </Typography>
                 <TextField required name="firstname" label="First Name" 
-                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent? "none": ""}} 
                   onChange={e=> {handleChange(e)}}
+                 
                 />
                 <TextField required name="lastname" label="Last Name"
-                  sx = {{ width: 300, input: { color: "#181a30" }}} 
+                  sx = {{ width: 300, input: { color: "#181a30"  }, display: emailSent? "none": ""}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <TextField required name="email" label="Email Address" error = {email && invalidEmail} helperText= {invalidEmail? "This must be a valid Queen's email account": ""}
-                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent? "none": ""}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <TextField required name="phone" label="Phone Number" error = {phone && invalidPhone} helperText = {invalidPhone? "This phone number is invalid": ""}
-                  sx = {{input: { color: "#181a30" }, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, width: 300, display: emailSent? "none": ""}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <FormGroup>
           
-                  <FormControlLabel required control={<Checkbox />} label="I have read CaCo's privacy and security policy and consent to the guidelines they have outlined." onChange={e=> {handleSecurityCheckbox(e)}}/>
+                  <FormControlLabel sx = {{ display: emailSent? "none": ""}}required control={<Checkbox />} label="I have read CaCo's privacy and security policy and consent to the guidelines they have outlined." onChange={e=> {handleSecurityCheckbox(e)}}/>
             
                 </FormGroup>
                 
-                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)}>Submit</Button>
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4, display: emailSent? "none": ""}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick = {(e) => {handleClick()}}>Submit</Button>
+
+                <Typography variant = "h4">
+                  A code has been sent to your Queen's email
+                </Typography>
+                <TextField type= 'number' name="code" label="Enter Code"  inputProps={{min: 0, maxLength: 5,style: { textAlign: 'center' }}}
+                  sx = {{input: { color: "#181a30" }, marginTop: 5,align: 'center',marginRight: 3, marginBottom: 2, width: 350, display: emailSent? "": "none"}} 
+                  onChange={e=> {handleChange(e)}}
+                />
                 
+                <br/>
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", display: emailSent? "": "none"}} disabled = {code.length !== 5} onClick = {(e) => {handleCodeClick()}}>Confirm Email</Button>
               </Grid>
             
               <Grid item xs ={15} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
-                <img src={cacoimage} alt="Caco Phone" width ={450} height = {600} style = {{marginRight: 100}}/>
+                <img src={cacoimage} alt="Caco Phone" width ={450} height = {450} style = {{marginRight: 100}}/>
               </Grid>
             
             </Grid>
