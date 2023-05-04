@@ -8,6 +8,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import cacoimage from '../assets/cacoimage.png'
+import books from '../assets/book-stack.png'
+import mentalhealth from '../assets/mental-health.png'
+import school from '../assets/school.png'
+import study from '../assets/study.png'
+import gym from '../assets/weightlifter.png'
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -79,7 +84,7 @@ export default function DashboardAppPage() {
           Welcome to CaCo
         </Typography> */}
 
-        <Grid container spacing={5}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={25} md={15}>
           <Card
             style={{
@@ -98,25 +103,169 @@ export default function DashboardAppPage() {
              Welcome to CaCo
             </Typography>
             <Grid container spacing = {2}>
+              <Grid item xs ={15} sm ={5} md = {5} sx = {{ textAlign: 'center'}}>
+                
+                <Typography variant="h3" sx= {{fontWeight: 'bold', marginBottom: 2, marginLeft:32}}>
+                  The Personal Texting Assitant for Queen's University Students!
+                </Typography>
+                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2,marginLeft:32}}>
+                  CaCo provides a quick and easy way to get answers for any campus related inquiries a student can have!
+                </Typography>
+                <Grid container spacing = {1} sx = {{marginLeft :15, marginTop: 6}}>
+                  <Grid item xs ={5} sm ={5} md = {2} sx = {{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                  <Card
+                    style={{
+                      py: 5,
+                      boxShadow: 0,
+                      textAlign: 'center',
+                      color: "#181a30",
+                      backgroundColor: "#f5ca28",
+                      flexDirection: "column",
+                      padding: 10, alignItems: 'center', justifyContent: 'center', display: 'flex'
+                    }}
+                  
+                  >
+                    <img src={books} alt="Caco Phone" width = {80} height ={80} style = {{marginBottom: 1}}/>
+                    <Typography variant="p">Course Information</Typography>
+                  </Card>
+                  
+                  </Grid>
+                  <Grid item xs ={15} sm ={5} md = {2} sx = {{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', marginLeft :3}}>
+                  <Card
+                    style={{
+                      py: 5,
+                      boxShadow: 0,
+                      textAlign: 'center',
+                      color: "#181a30",
+                      backgroundColor: "#f5ca28",
+                      flexDirection: "column",
+                      padding: 10, alignItems: 'center', justifyContent: 'center', display: 'flex'
+                    }}
+                  
+                  >
+                    <img src={school} alt="Caco Phone" width = {80} height ={80} style = {{marginBottom: 1}}/>
+                    <Typography variant="p">Campus FAQs</Typography>
+                  </Card>
+                  
+                  </Grid>
+                  <Grid item xs ={15} sm ={5} md = {2} sx = {{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', marginLeft :3}}>
+                  <Card
+                    style={{
+                      py: 5,
+                      boxShadow: 0,
+                      textAlign: 'center',
+                      color: "#181a30",
+                      backgroundColor: "#f5ca28",
+                      flexDirection: "column",
+                      padding: 10, alignItems: 'center', justifyContent: 'center', display: 'flex'
+                    }}
+                  
+                  >
+                    <img src={study} alt="Caco Phone" width = {80} height ={80} style = {{marginBottom: 1}}/>
+                    <Typography variant="p">Study Room Bookings</Typography>
+                  </Card>
+                  
+                  </Grid>
+                  <Grid item xs ={15} sm ={5} md = {2} sx = {{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', marginLeft :3}}>
+                  <Card
+                    style={{
+                      py: 5,
+                      boxShadow: 0,
+                      textAlign: 'center',
+                      color: "#181a30",
+                      backgroundColor: "#f5ca28",
+                      flexDirection: "column",
+                      padding: 10, alignItems: 'center', justifyContent: 'center', display: 'flex'
+                    }}
+                  
+                  >
+                    <img src={gym} alt="Caco Phone" width = {80} height ={80} style = {{marginBottom: 1}}/>
+                    <Typography variant="p">ARC Reservations</Typography>
+                  </Card>
+                  
+                  </Grid>
+                  <Grid item xs ={15} sm ={5} md = {2} sx = {{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', marginLeft :3}}>
+                  <Card
+                    style={{
+                      py: 5,
+                      boxShadow: 0,
+                      textAlign: 'center',
+                      color: "#181a30",
+                      backgroundColor: "#f5ca28",
+                      flexDirection: "column",
+                      padding: 10, alignItems: 'center', justifyContent: 'center', display: 'flex'
+                    }}
+                  
+                  >
+                    <img src={mentalhealth} alt="Caco Phone" width = {80} height ={80} style = {{marginBottom: 1}}/>
+                    <Typography variant="p">Mental Health Help</Typography>
+                  </Card>
+                  
+                  </Grid>
+                </Grid>
+              </Grid>
+            
+              <Grid item xs ={10} sm ={8} md = {6} sx = {{alignItems: "center", justifyContent: "center", display: "flex", paddingBottom: 10, marginRight: 15}}>  
+                <Card
+                  style={{
+                    py: 5,
+                    boxShadow: 0,
+                    textAlign: 'center',
+                    color: "#181a30",
+                    backgroundColor: "#f5ca28",
+                    padding: 10
+                  }}
+                
+                >
+                  <Typography variant = "h3"> 
+                    Check Out CaCo in Action
+                  </Typography>
+                  <iframe src="https://youtube.com/embed/9rOlfyppjJA" style={{height: "350px", width: "400px"}} title="Iframe Example"/>
+                </Card>
+                
+              </Grid>
+            
+            </Grid>
+          </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={25} md={15}>
+          <Card
+            style={{
+              py: 5,
+              boxShadow: 0,
+              textAlign: 'center',
+              color: "#181a30",
+              backgroundColor: "#f5ca28"
+              
+            }}
+          
+          >
+            
+
+            <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
+             Start Using CaCo Today
+            </Typography>
+            <Grid container spacing = {2}>
               <Grid item xs ={15} sm ={5} md = {6} sx = {{marginLeft: 10, textAlign: 'left'}}>
                 
                 <Typography variant="h3" sx= {{fontWeight: 'bold', marginBottom: 2}}>
                   Sign Up
                 </Typography>
                 <TextField required name="firstname" label="First Name" 
-                  sx = {{input: { color: "#f5ca28" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <TextField required name="lastname" label="Last Name"
-                  sx = {{ width: 300, input: { color: "#f5ca28" }}} 
+                  sx = {{ width: 300, input: { color: "#181a30" }}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <TextField required name="email" label="Email Address" error = {email && invalidEmail} helperText= {invalidEmail? "This must be a valid Queen's email account": ""}
-                  sx = {{input: { color: "#f5ca28" }, marginRight: 3, marginBottom: 2, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <TextField required name="phone" label="Phone Number" error = {phone && invalidPhone} helperText = {invalidPhone? "This phone number is invalid": ""}
-                  sx = {{input: { color: "#f5ca28" }, width: 300}} 
+                  sx = {{input: { color: "#181a30" }, width: 300}} 
                   onChange={e=> {handleChange(e)}}
                 />
                 <FormGroup>
@@ -125,68 +274,12 @@ export default function DashboardAppPage() {
             
                 </FormGroup>
                 
-                <Button variant="contained" size="large" sx = {{backgroundColor: "#f5ca28", color: "#181a30", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)}>Submit</Button>
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4}} disabled = {!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)}>Submit</Button>
                 
               </Grid>
             
               <Grid item xs ={15} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
-                <img src={cacoimage} alt="Caco Phone" width ={450} height = {600}/>
-              </Grid>
-            
-            </Grid>
-          </Card>
-          </Grid>
-
-          
-          <Grid item xs={12} sm={25} md={15}>
-          <Card
-            style={{
-              py: 5,
-              boxShadow: 0,
-              textAlign: 'center',
-              color: "#f5ca28",
-              backgroundColor: "#181a30"
-              
-            }}
-          
-          >
-            
-
-            <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
-             What is CaCo?
-            </Typography>
-            <Grid container spacing = {2}>
-              <Grid item xs ={20} sm ={7} md = {6} sx = {{marginLeft: 10, textAlign: 'left'}}>
-                
-                <Typography variant="h4" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                  CaCo is your Queen's University Digital Texting Assistant developed by 4 University students! We want to provide you with an easy way to quickly retireve various questions about Queen's 
-                  University from one place 😊 !
-                </Typography>
-                <Typography variant="h4" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                  We provide students with various features and resources such as:
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                📚 Course FAQs
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                🏫 On-Campus FAQs
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                🎓 Academic Support
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                🏥 On-Campus Health Services
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                🧠 On-Campus Study Room Bookings
-                </Typography>
-                <Typography variant="h5" sx= {{fontWeight: 'bold', marginBottom: 2}}>
-                💪 ARC Gym Bookings
-                </Typography>
-              </Grid>
-            
-              <Grid item xs ={10} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
-                <iframe src="https://youtube.com/embed/9rOlfyppjJA" style={{height: "450px", width: "400px"}} title="Iframe Example"/>
+                <img src={cacoimage} alt="Caco Phone" width ={450} height = {600} style = {{marginRight: 100}}/>
               </Grid>
             
             </Grid>
