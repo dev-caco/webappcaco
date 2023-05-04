@@ -11,27 +11,27 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
-
+import logo from '../../../assets/logo.png'
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
 
-const HEADER_MOBILE = 64;
+const HEADER_MOBILE = 55;
 
 const HEADER_DESKTOP = 92;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
-  ...bgBlur({ color: theme.palette.background.default }),
+  ...bgBlur({ color: '#ffffff' }),
   boxShadow: 'none',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${NAV_WIDTH + 1}px)`,
+    width: `100%`,
   },
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: HEADER_MOBILE,
   [theme.breakpoints.up('lg')]: {
-    minHeight: HEADER_DESKTOP,
+    minHeight: 55,
     padding: theme.spacing(0, 5),
   },
 }));
@@ -64,15 +64,13 @@ export default function Header({ onOpenNav }) {
 
         <Stack
           direction="row"
-          alignItems="center"
+          alignItems="left"
           spacing={{
             xs: 0.5,
             sm: 1,
           }}
         >
-          <LanguagePopover />
-          <NotificationsPopover />
-          <AccountPopover />
+          <img src={logo} alt="Caco Phone" width ={180} height = {40}/>
         </Stack>
       </StyledToolbar>
     </StyledRoot>
