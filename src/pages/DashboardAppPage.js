@@ -1,18 +1,22 @@
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
-import { useState } from 'react';
+import React, { useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography,TextField, Card,Button, CardActions} from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+
 import cacoimage from '../assets/chat.png'
 import books from '../assets/book-stack.png'
 import mentalhealth from '../assets/mental-health.png'
 import school from '../assets/school.png'
 import study from '../assets/study.png'
 import gym from '../assets/weightlifter.png'
+
 // components
 import Iconify from '../components/iconify';
 import UsersService from '../services/UserService'
@@ -29,9 +33,12 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 
-// ----------------------------------------------------------------------
+const Alert = React.forwardRef((props, ref)=> {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function DashboardAppPage() {
+  
   const theme = useTheme();
   const [firstname, setFirstName] = useState("")
   const [lastname, setLastName] = useState("")
@@ -41,8 +48,10 @@ export default function DashboardAppPage() {
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
   const [code, setCode] = useState("")
+  const [generatedCode, setGeneratedCode] = useState("")
   const [emailSent,setEmailSent] = useState(false)
-
+  const [showVerified, setShowVerified] = useState(false)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const usersService = UsersService();
 
   const handleChange = (event) => {
@@ -83,6 +92,7 @@ export default function DashboardAppPage() {
   async function handleClick() {
     setEmailSent(true)
     const verifyCode = Math.floor(Math.random()*90000) + 10000
+    setGeneratedCode(verifyCode)
     const body = {
       first_name: firstname,
       last_name: lastname,
@@ -105,11 +115,23 @@ export default function DashboardAppPage() {
   }
 
   async function handleCodeClick(){
-    console.log(code)
+    if(generatedCode === code) {
+      setShowVerified(true)
+    } else {
+      setOpenSnackbar(true)
+    }
   }
   const handleSecurityCheckbox = (event) => {
     console.log(event.target.checked)
     setSecurityChecked(event.target.checked);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
   return (
     <>
@@ -334,7 +356,16 @@ export default function DashboardAppPage() {
             </Grid>
           </Card>
           </Grid>
-
+          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{
+                  horizontal: "center"
+              }}>
+            <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}> anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "center"
+              }}
+              Invalid Code
+            </Alert>
+          </Snackbar>
           {/* <Grid item xs={12} sm={25} md={15}>
             <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid> */}
