@@ -4,19 +4,27 @@ function UserService() {
     const sv = {
 
         async sendEmailCode(userObj) {
-            const res = await axios.post(`http://localhost:5000/dev/code`, userObj)
-            return res
+            
+            await axios.post(`http://localhost:5000/dev/code`, userObj)
         },
 
         async insertUser(user) {
-            const res = await axios.post(`http://localhost:5000/dev/insertUser`, user)
-            return res
+            await axios.post(`http://localhost:5000/dev/insertUser`, user)
         },
 
         async setUserVerified(email) {
             const res = await axios.post(`http://localhost:5000/dev/verifyUser`,{
                 queens_email: email
             })
+            return res
+        },
+
+        async checkCode(code,email) {
+            const res = await axios.post(`http://localhost:5000/dev/checkCode`,{
+                user_code: code,
+                queens_email: email
+            })
+            return res.data.codeStatus
         }
     }
 

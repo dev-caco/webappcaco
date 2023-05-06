@@ -87,22 +87,19 @@ export default function DashboardAppPage() {
       code: verifyCode
     }
     try {
-      const dbRes = await usersService.insertUser(body)
-      console.log(dbRes)
-      const codeRes = await usersService.sendEmailCode({
-        queens_email: email,
-        code: verifyCode
+      await usersService.insertUser(body)
+      await usersService.sendEmailCode({
+        user_code: verifyCode,
+        queens_email: email
       })
-
-      console.log(codeRes)
     } catch(e) {
       console.log(e)
     }
   }
 
   async function handleCodeClick(){
-    const matchCode = true 
-
+    const matchCode = await usersService.checkCode(code,email)
+    console.log(matchCode)
     if(matchCode) {
       await usersService.setUserVerified(email)
       setShowVerified(true)
@@ -335,9 +332,15 @@ export default function DashboardAppPage() {
                 />
                 
                 <br/>
-                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", display: emailSent? "": "none"}} disabled = {code.length !== 5} onClick = {(e) => {handleCodeClick()}}>Confirm Email</Button>
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", display: emailSent? "": "none"}} disabled = {code.length !== 5 || showVerified} onClick = {(e) => {handleCodeClick()}}>Confirm Email</Button>
+                <Typography variant = "h4" sx = {{color: '#32a852', diplay: 'flex', maringTop: 5}} hidden = {!showVerified}>
+                Success! You are now ready to use CaCo 📱
+                </Typography>
+                <Typography variant = "h3" sx = {{color: '#32a852', diplay: 'flex'}} hidden = {!showVerified}>
+                Text CaCo Here: +1 (365) 536-2226
+                </Typography>
               </Grid>
-            
+             
               <Grid item xs ={15} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
                 <img src={cacoimage} alt="Caco Phone" width ={450} height = {450} style = {{marginRight: 100}}/>
               </Grid>
