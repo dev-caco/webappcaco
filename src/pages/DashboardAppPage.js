@@ -1,37 +1,30 @@
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
-import { useState } from 'react';
+import React, { useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography,TextField, Card,Button, CardActions} from '@mui/material';
+import { Grid,Typography,TextField, Card,Button} from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+
 import cacoimage from '../assets/chat.png'
 import books from '../assets/book-stack.png'
 import mentalhealth from '../assets/mental-health.png'
 import school from '../assets/school.png'
 import study from '../assets/study.png'
 import gym from '../assets/weightlifter.png'
+
 // components
-import Iconify from '../components/iconify';
 import UsersService from '../services/UserService'
 // sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
-
-// ----------------------------------------------------------------------
+const Alert = React.forwardRef((props, ref)=> {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function DashboardAppPage() {
+  
   const theme = useTheme();
   const [firstname, setFirstName] = useState("")
   const [lastname, setLastName] = useState("")
@@ -41,8 +34,10 @@ export default function DashboardAppPage() {
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
   const [code, setCode] = useState("")
+  
   const [emailSent,setEmailSent] = useState(false)
-
+  const [showVerified, setShowVerified] = useState(false)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const usersService = UsersService();
 
   const handleChange = (event) => {
@@ -83,6 +78,7 @@ export default function DashboardAppPage() {
   async function handleClick() {
     setEmailSent(true)
     const verifyCode = Math.floor(Math.random()*90000) + 10000
+    
     const body = {
       first_name: firstname,
       last_name: lastname,
@@ -91,25 +87,37 @@ export default function DashboardAppPage() {
       code: verifyCode
     }
     try {
-      const dbRes = await usersService.insertUser(body)
-      console.log(dbRes)
-      const codeRes = await usersService.sendEmailCode({
-        queens_email: email,
-        code: verifyCode
+      await usersService.insertUser(body)
+      await usersService.sendEmailCode({
+        user_code: verifyCode,
+        queens_email: email
       })
-
-      console.log(codeRes)
     } catch(e) {
       console.log(e)
     }
   }
 
   async function handleCodeClick(){
-    console.log(code)
+    const matchCode = await usersService.checkCode(code,email)
+    console.log(matchCode)
+    if(matchCode) {
+      await usersService.setUserVerified(email)
+      setShowVerified(true)
+    } else {
+      setOpenSnackbar(true)
+    }
   }
   const handleSecurityCheckbox = (event) => {
     console.log(event.target.checked)
     setSecurityChecked(event.target.checked);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
   return (
     <>
@@ -324,9 +332,15 @@ export default function DashboardAppPage() {
                 />
                 
                 <br/>
-                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", display: emailSent? "": "none"}} disabled = {code.length !== 5} onClick = {(e) => {handleCodeClick()}}>Confirm Email</Button>
+                <Button variant="contained" size="large" sx = {{backgroundColor: "#181a30", color: "#f5ca28", display: emailSent? "": "none"}} disabled = {code.length !== 5 || showVerified} onClick = {(e) => {handleCodeClick()}}>Confirm Email</Button>
+                <Typography variant = "h4" sx = {{color: '#32a852', diplay: 'flex', maringTop: 5}} hidden = {!showVerified}>
+                Success! You are now ready to use CaCo 📱
+                </Typography>
+                <Typography variant = "h3" sx = {{color: '#32a852', diplay: 'flex'}} hidden = {!showVerified}>
+                Text CaCo Here: +1 (365) 536-2226
+                </Typography>
               </Grid>
-            
+             
               <Grid item xs ={15} sm ={5} md = {4} sx = {{alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10}}>  
                 <img src={cacoimage} alt="Caco Phone" width ={450} height = {450} style = {{marginRight: 100}}/>
               </Grid>
@@ -334,7 +348,15 @@ export default function DashboardAppPage() {
             </Grid>
           </Card>
           </Grid>
-
+          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose} 
+              anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center"
+              }}>
+            <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}> 
+              Invalid Code
+            </Alert>
+          </Snackbar>
           {/* <Grid item xs={12} sm={25} md={15}>
             <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid> */}
