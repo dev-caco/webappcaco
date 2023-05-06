@@ -11,6 +11,12 @@ function UserService() {
         async insertUser(user) {
             const res = await axios.post(`http://localhost:5000/dev/insertUser`, user)
             return res
+        },
+
+        async setUserVerified(email) {
+            const res = await axios.post(`http://localhost:5000/dev/verifyUser`,{
+                queens_email: email
+            })
         }
     }
 

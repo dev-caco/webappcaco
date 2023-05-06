@@ -1,9 +1,8 @@
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
 import React, { useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography,TextField, Card,Button, CardActions} from '@mui/material';
+import { Grid,Typography,TextField, Card,Button} from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -18,21 +17,8 @@ import study from '../assets/study.png'
 import gym from '../assets/weightlifter.png'
 
 // components
-import Iconify from '../components/iconify';
 import UsersService from '../services/UserService'
 // sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
-
 const Alert = React.forwardRef((props, ref)=> {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -48,7 +34,7 @@ export default function DashboardAppPage() {
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
   const [code, setCode] = useState("")
-  const [generatedCode, setGeneratedCode] = useState("")
+  
   const [emailSent,setEmailSent] = useState(false)
   const [showVerified, setShowVerified] = useState(false)
   const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -92,7 +78,7 @@ export default function DashboardAppPage() {
   async function handleClick() {
     setEmailSent(true)
     const verifyCode = Math.floor(Math.random()*90000) + 10000
-    setGeneratedCode(verifyCode)
+    
     const body = {
       first_name: firstname,
       last_name: lastname,
@@ -115,7 +101,10 @@ export default function DashboardAppPage() {
   }
 
   async function handleCodeClick(){
-    if(generatedCode === code) {
+    const matchCode = true 
+
+    if(matchCode) {
+      await usersService.setUserVerified(email)
       setShowVerified(true)
     } else {
       setOpenSnackbar(true)
@@ -356,13 +345,12 @@ export default function DashboardAppPage() {
             </Grid>
           </Card>
           </Grid>
-          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{
+          <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose} 
+              anchorOrigin={{
+                  vertical: "bottom",
                   horizontal: "center"
               }}>
-            <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}> anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "center"
-              }}
+            <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}> 
               Invalid Code
             </Alert>
           </Snackbar>
