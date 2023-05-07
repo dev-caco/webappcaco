@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
+import Divider from '@mui/material/Divider';
 import cacoimage from '../assets/chat.png'
 import books from '../assets/book-stack.png'
 import mentalhealth from '../assets/mental-health.png'
@@ -35,6 +35,7 @@ export default function DashboardAppPage() {
   const [lastname, setLastName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
+  const [loginEmail, setLoginEmail] = useState("")
   const [invalidPhone, setInvalidPhone] = useState(false)
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [securityChecked, setSecurityChecked] = useState(false)
@@ -99,6 +100,14 @@ export default function DashboardAppPage() {
         }
         setEmail(event.target.value)
         break;
+      case 'loginEmail':
+        if (!event.target.value.endsWith("@queensu.ca")) {
+          setInvalidEmail(true)
+        } else {
+          setInvalidEmail(false)
+        }
+        setLoginEmail(event.target.value)
+        break;
       case 'code':
         setCode(event.target.value)
         console.log(code)
@@ -111,6 +120,7 @@ export default function DashboardAppPage() {
 
   async function handleClick() {
     setEmailSent(true)
+    setShowVerified(false)
     const verifyCode = Math.floor(Math.random() * 90000) + 10000
 
     const body = {
@@ -131,12 +141,46 @@ export default function DashboardAppPage() {
     }
   }
 
-  async function handleCourseClick(){
+  async function handleLoginClick() {
+    setEmailSent(true)
+    setShowVerified(false)
+    const verifyCode = Math.floor(Math.random() * 90000) + 10000
+
+    const body = {
+      first_name: "",
+      last_name: "",
+      queens_email: loginEmail,
+      user_phone: "",
+      code: verifyCode
+    }
+    try {
+      await usersService.insertUser(body)
+      await usersService.sendEmailCode({
+        user_code: verifyCode,
+        queens_email: loginEmail
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function handleCourseClick() {
     console.log(checked)
   }
 
   async function handleCodeClick() {
-    const matchCode = await usersService.checkCode(code, email)
+    const chosenEmail = (email.length > 0 ? email : loginEmail)
+    const matchCode = await usersService.checkCode(code, chosenEmail)
+    console.log(matchCode)
+    if (matchCode) {
+      setShowVerified(true)
+    } else {
+      setOpenSnackbar(true)
+    }
+  }
+
+  async function handleLoginCodeClick() {
+    const matchCode = await usersService.checkCode(code, loginEmail)
     console.log(matchCode)
     if (matchCode) {
       setShowVerified(true)
@@ -324,44 +368,74 @@ export default function DashboardAppPage() {
                 backgroundColor: "#f5ca28"
 
               }}
-
             >
 
 
               <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
                 Start Using CaCo Today
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={15} sm={5} md={5} sx={{ marginLeft: 20, textAlign: 'center', alignItems: 'center', justifyContent: 1 }}>
+                <div hidden={emailSent}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={15} sm={5} md={5} sx={{ marginLeft: 20, textAlign: 'center', alignItems: 'center', justifyContent: 1 }}>
 
-                  <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
-                    Sign Up
-                  </Typography>
-                  <TextField required name="firstname" label="First Name"
-                    sx={{ input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent ? "none" : "" }}
-                    onChange={e => { handleChange(e) }}
+                      <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                        Sign Up
+                      </Typography>
+                      <TextField required name="firstname" label="First Name"
+                        sx={{ input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent ? "none" : "" }}
+                        onChange={e => { handleChange(e) }}
 
-                  />
-                  <TextField required name="lastname" label="Last Name"
-                    sx={{ width: 300, input: { color: "#181a30" }, display: emailSent ? "none" : "" }}
-                    onChange={e => { handleChange(e) }}
-                  />
-                  <TextField required name="email" label="Email Address" error={email && invalidEmail} helperText={invalidEmail ? "This must be a valid Queen's email account" : ""}
-                    sx={{ input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent ? "none" : "" }}
-                    onChange={e => { handleChange(e) }}
-                  />
-                  <TextField required name="phone" label="Phone Number" error={phone && invalidPhone} helperText={invalidPhone ? "This phone number is invalid" : ""}
-                    sx={{ input: { color: "#181a30" }, width: 300, display: emailSent ? "none" : "" }}
-                    onChange={e => { handleChange(e) }}
-                  />
-                  <FormGroup>
+                      />
+                      <TextField required name="lastname" label="Last Name"
+                        sx={{ width: 300, input: { color: "#181a30" }, display: emailSent ? "none" : "" }}
+                        onChange={e => { handleChange(e) }}
+                      />
+                      <TextField required name="email" label="Email Address" error={email && invalidEmail} helperText={invalidEmail ? "This must be a valid Queen's email account" : ""}
+                        sx={{ input: { color: "#181a30" }, marginRight: 3, marginBottom: 2, width: 300, display: emailSent ? "none" : "" }}
+                        onChange={e => { handleChange(e) }}
+                      />
+                      <TextField required name="phone" label="Phone Number" error={phone && invalidPhone} helperText={invalidPhone ? "This phone number is invalid" : ""}
+                        sx={{ input: { color: "#181a30" }, width: 300, display: emailSent ? "none" : "" }}
+                        onChange={e => { handleChange(e) }}
+                      />
+                      <FormGroup>
 
-                    <FormControlLabel sx={{ display: emailSent ? "none" : "" }} required control={<Checkbox />} label="I have read CaCo's privacy and security policy and consent to the guidelines they have outlined." onChange={e => { handleSecurityCheckbox(e) }} />
+                        <FormControlLabel sx={{ display: emailSent ? "none" : "" }} required control={<Checkbox />} label="I have read CaCo's privacy and security policy and consent to the guidelines they have outlined." onChange={e => { handleSecurityCheckbox(e) }} />
 
-                  </FormGroup>
+                      </FormGroup>
 
-                  <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4, display: emailSent ? "none" : "" }} disabled={!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick={(e) => { handleClick() }}>Submit</Button>
+                      <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4, display: emailSent ? "none" : "" }} disabled={!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick={(e) => { handleClick() }}>Sign Up</Button>
 
+                      <Typography variant="h4" style={{ display: emailSent ? "" : "none" }}>
+                        A code has been sent to your Queen's email
+                      </Typography>
+                      <TextField type='number' name="code" label="Enter Code" inputProps={{ min: 0, maxLength: 5, style: { textAlign: 'center' } }}
+                        sx={{ input: { color: "#181a30" }, marginTop: 5, align: 'center', marginRight: 3, marginBottom: 2, width: 350, display: emailSent ? "" : "none" }}
+                        onChange={e => { handleChange(e) }}
+                      />
+
+                      <br />
+                      <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", display: emailSent ? "" : "none" }} disabled={code.length !== 5 || showVerified} onClick={(e) => { handleCodeClick() }}>Confirm Email</Button>
+                    </Grid>
+                    <Grid item xs={15} sm={1} sx={{ alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10, fontWeight: 'bold' }}>
+                      <Divider orientation="vertical" flexItem />
+                    </Grid>
+                    <Grid item xs={15} sm={4} md={4} sx={{ marginLeft: 0, textAlign: 'center', alignItems: 'center', justifyContent: 1 }}>
+
+                      <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 7 }}>
+                        Log In
+                      </Typography>
+                      <TextField required name="loginEmail" label="Email" error={email && invalidEmail} helperText={invalidEmail ? "This must be a valid Queen's email account" : ""}
+                        sx={{ input: { color: "#181a30" }, marginRight: 3, marginBottom: 11, width: "100%", display: emailSent ? "none" : "" }}
+                        onChange={e => { handleChange(e) }}
+
+                      />
+
+                      <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4, display: emailSent ? "none" : "" }} disabled={!(loginEmail && !invalidEmail)} onClick={(e) => { handleLoginClick() }}>Log In</Button>
+                    </Grid>
+                  </Grid>
+                </div>
+                <div hidden={!emailSent}>
                   <Typography variant="h4" style={{ display: emailSent ? "" : "none" }}>
                     A code has been sent to your Queen's email
                   </Typography>
@@ -372,25 +446,9 @@ export default function DashboardAppPage() {
 
                   <br />
                   <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", display: emailSent ? "" : "none" }} disabled={code.length !== 5 || showVerified} onClick={(e) => { handleCodeClick() }}>Confirm Email</Button>
-                  <Typography variant="h4" sx={{ color: '#32a852', diplay: 'flex', maringTop: 5 }} hidden={!showVerified}>
-                    Success! You are now ready to use CaCo 📱
-                  </Typography>
-                  <Typography variant="h3" sx={{ color: '#32a852', diplay: 'flex' }} hidden={!showVerified}>
-                    Text CaCo Here: +1 (365) 536-2226
-                  </Typography>
-                  <Typography variant="h3" sx={{ color: '#32a852', diplay: 'flex' }} hidden={!showVerified}>
-                    Check all the courses that you are taking this semester for a more personal experience! (Optional)
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={15} sm={5} md={4} sx={{ alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10 }}>
-                  <img src={cacoimage} alt="Caco Phone" width={450} height={450} style={{ marginRight: 100 }} />
-                </Grid>
-
-              </Grid>
+                </div>
             </Card>
           </div>
-
           <div hidden={!showVerified}>
             <Card
               style={{
@@ -401,10 +459,7 @@ export default function DashboardAppPage() {
                 backgroundColor: "#f5ca28"
 
               }}
-
             >
-
-
               <Typography variant="h1" sx={{ opacity: 1, paddingBottom: 5, marginTop: 2 }}>
                 Success! You are now ready to use CaCo
               </Typography>
@@ -417,7 +472,7 @@ export default function DashboardAppPage() {
                   <Typography variant="h5" sx={{ marginBottom: 2 }}>
                     Check all the courses that you are taking this semester for a more personal experience! (Optional)
                   </Typography>
-                  <List sx={{ width: '100%', maxWidth: 360}}>
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
                     {allCourses.map((value) => {
                       console.log(`Index of: ${value.course_code} = ${checked.indexOf(value)}`)
                       const labelId = `checkbox-list-label-${value.course_code}`;
@@ -443,7 +498,7 @@ export default function DashboardAppPage() {
                       );
                     })}
                   </List>
-                  <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4}} disabled={!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick={(e) => { handleCourseClick() }}>Add Courses</Button>
+                  <Button variant="contained" size="large" sx={{ backgroundColor: "#181a30", color: "#f5ca28", marginBottom: 5, marginTop: 2, justifyContent: 'center', paddingLeft: 4, paddingRight: 4 }} disabled={!(firstname && lastname && email && phone && !invalidEmail && !invalidPhone && securityChecked)} onClick={(e) => { handleCourseClick() }}>Add Courses</Button>
                 </Grid>
                 <Grid item xs={15} sm={5} md={4} sx={{ alignItems: "right", justifyContent: "right", display: "flex", paddingBottom: 10 }}>
                   <img src={cacoimage} alt="Caco Phone" width={450} height={450} style={{ marginRight: 100 }} />
@@ -451,8 +506,6 @@ export default function DashboardAppPage() {
               </Grid>
             </Card>
           </div>
-
-
         </Grid>
         <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleSnackbarClose}
           anchorOrigin={{
