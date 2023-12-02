@@ -25,6 +25,13 @@ function UserService() {
                 queens_email: email
             })
             return res.data.codeStatus
+        },
+
+        async showCourses(){
+            const res = await axios.post(`http://localhost:5000/dev/courses`,{
+                department: "computer science"
+            })
+            return res.data.courses
         }
     }
 
